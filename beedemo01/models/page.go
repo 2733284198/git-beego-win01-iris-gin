@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -18,6 +19,12 @@ func init() {
 
 func GetPage() Page {
 	trn := Page{Website: "baidu.com", Email: "manlan2010@163.com"}
+
+	o := orm.NewOrm()
+	p := Page{Id: 1}
+
+	err := o.Read(&p)
+	fmt.Println(&err)
 
 	return trn
 }

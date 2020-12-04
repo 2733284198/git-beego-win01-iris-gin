@@ -18,7 +18,8 @@ func init() {
 }
 
 func GetPage() Page {
-	trn := Page{Website: "baidu.com", Email: "manlan2010@163.com"}
+	//trn := Page{Website: "baidu.com", Email: "manlan2010@163.com"}
+	//return trn
 
 	o := orm.NewOrm()
 	p := Page{Id: 1}
@@ -26,5 +27,16 @@ func GetPage() Page {
 	err := o.Read(&p)
 	fmt.Println(&err)
 
-	return trn
+	return p
+}
+
+func UpdatePage() {
+	p := Page{
+		Id:      1,
+		Website: "jjdd.com",
+		Email:   "jjdd@jd.com",
+	}
+
+	o := orm.NewOrm()
+	o.Update(&p)
 }

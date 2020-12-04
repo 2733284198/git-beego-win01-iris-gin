@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 type User struct {
@@ -23,10 +24,17 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
+	//r.GET("/", func(c *gin.Context) {
+	// 传递参数:
+	r.GET("/:id", func(c *gin.Context) {
 		//c.String(200, "Hello World")
+		// 转换为 int
+		id, _ := strconv.Atoi(c.Param("id"))
+		//id := c.Param("id")
+
 		c.JSON(200, gin.H{
 			//"mess": "Hello World",
+			"uid":  id,
 			"user": user,
 		})
 	})

@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
 	"strconv"
 )
 
@@ -22,7 +25,22 @@ func main() {
 		Age:  20,
 	}
 
-	r := gin.Default()
+	//  带日志启动，回复，
+	// engine.Use(Logger(), Recovery())
+	//r := gin.Default()
+	//
+	r := gin.New()
+	r.Use(gin.Logger())   // 启动日志
+	r.Use(gin.Recovery()) // 启动恢复，
+
+	//r.GET("/benchmark", MyBenchLogger(), benchEndpoint)
+
+	/* 登录组件 */
+	/*authorized := r.Group("/")
+	authorized.Use(AuthRequired())
+	{
+
+	}*/
 
 	//r.GET("/", func(c *gin.Context) {
 	// 传递参数:
@@ -37,6 +55,20 @@ func main() {
 			"uid":  id,
 			"user": user,
 		})
+	})
+
+	// Set a lower memory limit for multipart forms (default is 32 MiB)
+	r.MaxMultipartMemory = 8 << 20 // 8 MiB
+	//r.POST("/upload", func(c *gin.Context) {
+	r.POST("/upload", func(c *gin.Context) {
+		// single file
+		file, _ := c.FormFile("file")
+		log.Println(file.Filename)
+
+		// Upload the file to specific dst.
+		c.SaveUploadedFile(file, "./1.txt")
+
+		c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
 	})
 
 	r.Run(":910")

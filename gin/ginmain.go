@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 )
 
 type User struct {
@@ -29,8 +32,34 @@ func main() {
 	// engine.Use(Logger(), Recovery())
 	//r := gin.Default()
 	//
+
+	//gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.Use(gin.Logger())   // 启动日志
+	r.Use(gin.Logger()) // 启动日志
+
+	gin.DisableConsoleColor()
+	// Logging to a file.
+	f, _ := os.Create("./gin/gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
+
+	// LoggerWithFormatter middleware will write the logs to gin.DefaultWriter
+	// By default gin.DefaultWriter = os.Stdout
+	r.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+
+		// your custom format
+		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
+			param.ClientIP,
+			param.TimeStamp.Format(time.RFC1123),
+			param.Method,
+			param.Path,
+			param.Request.Proto,
+			param.StatusCode,
+			param.Latency,
+			//param.Request.UserAgent(),
+			param.ErrorMessage,
+		)
+	}))
 	r.Use(gin.Recovery()) // 启动恢复，
 
 	//r.GET("/benchmark", MyBenchLogger(), benchEndpoint)

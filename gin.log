@@ -1,0 +1,4 @@
+[GIN-debug] GET    /:id                      --> main.main.func2 (4 handlers)
+[GIN-debug] POST   /upload                   --> main.main.func3 (4 handlers)
+[GIN-debug] Listening and serving HTTP on :910
+192.168.3.2 - [Fri, 04 Dec 2020 23:22:14 CST] "GET /123123 HTTP/1.1 200 0s "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36" "
